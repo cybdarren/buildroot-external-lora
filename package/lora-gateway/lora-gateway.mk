@@ -21,7 +21,7 @@ define LORA_GATEWAY_INSTALL_STAGING_CMDS
     	$(INSTALL) -m 0644 -D $(@D)/libloragw/inc/$(f) $(STAGING_DIR)/usr/include/lora_gateway/libloragw/inc)
 endef
 
-ifeq ($(BR2_PACKAGE_LORA_GATEWAY), y)
+ifeq ($(BR2_PACKAGE_LORA_GATEWAY_UTILS), y)
 define LORA_GATEWAY_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 $(@D)/reset_lgw.sh $(TARGET_DIR)/opt/lora_gateway/libloragw/reset_lgw.sh
 	( \
@@ -31,12 +31,13 @@ define LORA_GATEWAY_INSTALL_TARGET_CMDS
 		done ; \
 	)
 endef
+else	
+ifeq ($(BR2_PACKAGE_LORA_GATEWAY), y)
+define LORA_GATEWAY_INSTALL_TARGET_CMDS
+	$(INSTALL) -D -m 0755 $(@D)/reset_lgw.sh $(TARGET_DIR)/opt/lora_gateway/libloragw/reset_lgw.sh
+endef
+endif
 endif
 
 $(eval $(generic-package))
-
-
-#		$(foreach filename, $(LORA_GATEWAY_UTIL_LIST), \
-#			find ./ -name $(filename) -perm 0755 -type f ; \
-#			) \
 
