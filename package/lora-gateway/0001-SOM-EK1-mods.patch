@@ -1,0 +1,132 @@
+From 0b260abfaac6dbaf932d7d690c9eecd61f0e7a6d Mon Sep 17 00:00:00 2001
+From: Darren Wenn <darren.wenn@microchip.com>
+Date: Wed, 16 Jan 2019 11:23:36 +0000
+Subject: [PATCH 1/3] Modified reset_lgw.sh to handle SOM-EK1 pin names
+
+---
+ reset_lgw.sh | 28 +++++++++++++++-------------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
+
+diff --git a/reset_lgw.sh b/reset_lgw.sh
+index 77de63e..a21a316 100755
+--- a/reset_lgw.sh
++++ b/reset_lgw.sh
+@@ -8,38 +8,40 @@
+ #       ./reset_lgw.sh stop
+ #       ./reset_lgw.sh start
+ 
+-# The reset pin of SX1301 is wired with RPi GPIO7
++# The reset pin of SX1301 is wired with SOM-EK1 
+ # If used on another platform, the GPIO number can be given as parameter.
+ if [ -z "$2" ]; then 
+-    IOT_SK_SX1301_RESET_PIN=7
++    IOT_SK_SX1301_RESET_PIN=32
++    IOT_SK_SX1301_RESET_PIN_NAME=PB2
+ else
+     IOT_SK_SX1301_RESET_PIN=$2
++    IOT_SK_SX1301_RESET_PIN_NAME=$3
+ fi
+ 
+-echo "Accessing concentrator reset pin through GPIO$IOT_SK_SX1301_RESET_PIN..."
++echo "Accessing concentrator reset pin through $IOT_SK_SX1301_RESET_PIN_NAME..."
+ 
+ WAIT_GPIO() {
+     sleep 0.1
+ }
+ 
+ iot_sk_init() {
+-    # setup GPIO 7
++    # setup GPIO
+     echo "$IOT_SK_SX1301_RESET_PIN" > /sys/class/gpio/export; WAIT_GPIO
+ 
+-    # set GPIO 7 as output
+-    echo "out" > /sys/class/gpio/gpio$IOT_SK_SX1301_RESET_PIN/direction; WAIT_GPIO
++    # set GPIO as output
++    echo "out" > /sys/class/gpio/$IOT_SK_SX1301_RESET_PIN_NAME/direction; WAIT_GPIO
+ 
+     # write output for SX1301 reset
+-    echo "1" > /sys/class/gpio/gpio$IOT_SK_SX1301_RESET_PIN/value; WAIT_GPIO
+-    echo "0" > /sys/class/gpio/gpio$IOT_SK_SX1301_RESET_PIN/value; WAIT_GPIO
++    echo "1" > /sys/class/gpio/$IOT_SK_SX1301_RESET_PIN_NAME/value; WAIT_GPIO
++    echo "0" > /sys/class/gpio/$IOT_SK_SX1301_RESET_PIN_NAME/value; WAIT_GPIO
+ 
+-    # set GPIO 7 as input
+-    echo "in" > /sys/class/gpio/gpio$IOT_SK_SX1301_RESET_PIN/direction; WAIT_GPIO
++    # set GPIO as input
++    echo "in" > /sys/class/gpio/$IOT_SK_SX1301_RESET_PIN_NAME/direction; WAIT_GPIO
+ }
+ 
+ iot_sk_term() {
+-    # cleanup GPIO 7
+-    if [ -d /sys/class/gpio/gpio$IOT_SK_SX1301_RESET_PIN ]
++    # cleanup GPIO 
++    if [ -d /sys/class/gpio/$IOT_SK_SX1301_RESET_PIN_NAME ]
+     then
+         echo "$IOT_SK_SX1301_RESET_PIN" > /sys/class/gpio/unexport; WAIT_GPIO
+     fi
+@@ -54,7 +56,7 @@ case "$1" in
+     iot_sk_term
+     ;;
+     *)
+-    echo "Usage: $0 {start|stop} [<gpio number>]"
++    echo "Usage: $0 {start|stop} [<gpio number> <gpio name>]"
+     exit 1
+     ;;
+ esac
+-- 
+2.7.4
+
+
+From 97bca48599f5e826ee981f82fc0547215ec884ce Mon Sep 17 00:00:00 2001
+From: Darren Wenn <darren.wenn@microchip.com>
+Date: Wed, 16 Jan 2019 12:09:27 +0000
+Subject: [PATCH 2/3] Updated Makefile to build for SAMA5 environment
+
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 3a1c041..aaf3059 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,7 +1,7 @@
+ ### Environment constants 
+ 
+-ARCH ?=
+-CROSS_COMPILE ?=
++ARCH ?= arm
++CROSS_COMPILE ?= arm-buildroot-linux-gnueabihf-
+ export
+ 
+ ### general build targets
+-- 
+2.7.4
+
+
+From 538912da584d6c37f851444e831a14ae8cc5c1bc Mon Sep 17 00:00:00 2001
+From: Darren Wenn <darren.wenn@microchip.com>
+Date: Wed, 16 Jan 2019 12:10:44 +0000
+Subject: [PATCH 3/3] Modified loragw_spi.native.c for SOM-EK1 MBus1 attached
+ SX1301 using /dev/spidev1.0
+
+---
+ libloragw/src/loragw_spi.native.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libloragw/src/loragw_spi.native.c b/libloragw/src/loragw_spi.native.c
+index c01ed1c..502000d 100644
+--- a/libloragw/src/loragw_spi.native.c
++++ b/libloragw/src/loragw_spi.native.c
+@@ -54,7 +54,7 @@ Maintainer: Sylvain Miermont
+ #define READ_ACCESS     0x00
+ #define WRITE_ACCESS    0x80
+ #define SPI_SPEED       8000000
+-#define SPI_DEV_PATH    "/dev/spidev0.0"
++#define SPI_DEV_PATH    "/dev/spidev1.0"
+ //#define SPI_DEV_PATH    "/dev/spidev32766.0"
+ 
+ /* -------------------------------------------------------------------------- */
+-- 
+2.7.4
+

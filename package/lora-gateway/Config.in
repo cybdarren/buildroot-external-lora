@@ -1,0 +1,13 @@
+config BR2_PACKAGE_LORA_GATEWAY
+	bool "lora-gateway"
+	default y
+	help
+	  LORA Gateway software library. A simple lora interface library
+	  for configured for a Microchip LORA radio connected to an SPI port.
+
+config BR2_PACKAGE_LORA_GATEWAY_UTILS
+	bool "lora-gateway-utils"
+	depends on BR2_PACKAGE_LORA_GATEWAY
+	help
+		Utilities for testing the Lora gateway
+
