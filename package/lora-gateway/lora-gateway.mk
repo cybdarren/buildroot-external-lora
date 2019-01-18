@@ -16,7 +16,7 @@ endef
 
 define LORA_GATEWAY_INSTALL_STAGING_CMDS
 	$(INSTALL) -D -m 0755 $(@D)/libloragw/libloragw.a $(STAGING_DIR)/usr/lib/lora_gateway/libloragw/libloragw.a
-
+	$(INSTALL) -D -m 0644 $(@D)/libloragw/library.cfg $(STAGING_DIR)/usr/include/lora_gateway/libloragw/library.cfg
 	$(foreach f,$(notdir $(wildcard $(@D)/libloragw/inc/*)),
     	$(INSTALL) -m 0644 -D $(@D)/libloragw/inc/$(f) $(STAGING_DIR)/usr/include/lora_gateway/libloragw/inc)
 endef
