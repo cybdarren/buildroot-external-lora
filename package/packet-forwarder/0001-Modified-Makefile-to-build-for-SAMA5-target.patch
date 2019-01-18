@@ -1,0 +1,27 @@
+From 62c19fabb70dc808b415b456d77787ced730e588 Mon Sep 17 00:00:00 2001
+From: Darren Wenn <darren.wenn@microchip.com>
+Date: Thu, 17 Jan 2019 16:47:58 +0000
+Subject: [PATCH] Modified Makefile to build for SAMA5 target
+
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index aee59c7..5332f51 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,8 +1,8 @@
+ ### Environment constants 
+ 
+ LGW_PATH ?= ../../lora_gateway/libloragw
+-ARCH ?=
+-CROSS_COMPILE ?=
++ARCH ?= arm
++CROSS_COMPILE ?= arm-buildroot-linux-gnueabihf-
+ export
+ 
+ ### general build targets
+-- 
+2.7.4
+
