@@ -23,18 +23,18 @@ endef
 
 ifeq ($(BR2_PACKAGE_LORA_GATEWAY_UTILS), y)
 define LORA_GATEWAY_INSTALL_TARGET_CMDS
-	$(INSTALL) -D -m 0755 $(@D)/reset_lgw.sh $(TARGET_DIR)/opt/lora_gateway/libloragw/reset_lgw.sh
+	$(INSTALL) -D -m 0755 $(@D)/reset_lgw.sh $(TARGET_DIR)/opt/lora_gateway/reset_lgw.sh
 	( \
 		cd $(LORA_GATEWAY_BUILDDIR) ; \
 		for filename in $$(find ./ -name "util_*" -perm 0755 -type f); do \
-		$(INSTALL) -m 0755 -D $$filename $(TARGET_DIR)/opt/lora_gateway/utils/`basename $$filename`; \
+		$(INSTALL) -m 0755 -D $$filename $(TARGET_DIR)/opt/lora_gateway/`basename $$filename`; \
 		done ; \
 	)
 endef
 else	
 ifeq ($(BR2_PACKAGE_LORA_GATEWAY), y)
 define LORA_GATEWAY_INSTALL_TARGET_CMDS
-	$(INSTALL) -D -m 0755 $(@D)/reset_lgw.sh $(TARGET_DIR)/opt/lora_gateway/libloragw/reset_lgw.sh
+	$(INSTALL) -D -m 0755 $(@D)/reset_lgw.sh $(TARGET_DIR)/opt/lora_gateway/reset_lgw.sh
 endef
 endif
 endif
