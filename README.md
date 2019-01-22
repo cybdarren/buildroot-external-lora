@@ -13,6 +13,7 @@ outside of the standard buildroot tree.
 
 For a description of the hardware configuration see [here](#Hardware)
 
+For a description of the gateway software configuration see [here](#Packet-Gateway-Setup)
 ## Install System Dependencies
 
 The external is tested on Ubuntu 16.04 LTS.  The following system build
@@ -120,6 +121,35 @@ GND          | J24 Pin 8  | GND     | 6+8
 * You must also short R80 to enable +5V in the Click socket
 
 ![SOM1-EK1-LORA-Connections](docs/som1_connections.png)
+
+## Packet Gateway Setup
+
+The packet gateway is configured to use /dev/spidev1.0 as the default SPI channel. The device tree overlay also enables an SPI connection on MBus2 however the libloragw library would need to be rebuilt to use this as the default SPI channel.
+
+The RESET pin for the LoRa gateway Radio module is attached to pin PB2 (IO 34). A startup script S99pkt_fwd automatically enables this pin, sets it as an output and sets it low to enable the radio. If any modification or manual testing of the board is performed then the state of this pin should be re-verfied if no communications are received.
+
+## Packet Forwarder Setup
+
+The packet forwarder implements the Semtech UDP reference implementation from the Lora-Net github site. Whilst it can be used with multiple server providers it has been tested with theThingsNetwork. After creating a new SD-Card image a few more steps are required to successfully configure the gateway for use.
+
+1. The packet forwarder software is installed in /opt/packet_forwarder
+2. At boot-time a startup script /etc/init.d/S99pkt_fwd is started that uses a global configuration file: /opt/packet_forwarder/global_conf.json
+3. This global_conf.json file must be edited to reflect your actual network setup.
+* Update the global gateway ID by running the script /opt/packet_forwarder/update_gwid.sh global_conf.json
+* Update the local_conf.json gateway ID by running /opt/packet_forwarder/update_gwid.sh local_conf.json  [If you do not do this the local conf default setting overrides the global one]
+* The update script takes the Mac-ID of the ethernet network interface and generates a unique gateway ID from it. It then searches the specified file for a gateway ID and rpelaces it with the new one.
+4. The global_conf.json file needs modifying to reflect the service provider. For TheThingsNetwork these are:
+```
+"gateway_conf": {
+    "gateway_ID": "AA555A0000000000",
+    /* change with default server address/ports, or overwrite in local_conf.json */
+    "server_address": "router.eu.thethings.network",
+    "serv_port_up": 1700,
+    "serv_port_down": 1700, 
+    ...
+```
+
+The gateway_ID should be changed to match the unique gateway ID. This is the ID that we register with theThingsNetwork when creating a gateway. The serv_port_up and serv_port_down should be changed to 1700 to match the TTN requirements.
 
 ## Documentation
 
