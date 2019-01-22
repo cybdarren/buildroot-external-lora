@@ -1,11 +1,19 @@
+
+
 config BR2_PACKAGE_PACKET_FORWARDER
 	bool "packet-forwarder"
 	default y
+	depends on BR2_PACKAGE_LORA_GATEWAY
 	help
 	  LORA Packet forwarder software library. The packet forwarder forwards RF packets
 	  received by the concentrator through an IP/UDP link to a server. Likewise
 	  packets received from the server and forwarded to the concentrator and emitted
 	  as RF packets.
-	  
 
+config BR2_PACKAGE_PACKET_FORWARDER_UTILS
+	bool "packet-forwarder-utils"
+	default y
+	depends on BR2_PACKAGE_PACKET_FORWARDER
+	help
+	  Utilities to help testing and configuring the LORA packet forwarder.
 

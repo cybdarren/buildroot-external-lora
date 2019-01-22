@@ -1,0 +1,43 @@
+#!/bin/sh
+
+start()
+{
+	echo "Starting LORA packet forwarder"
+	# Enable PB2 as an output and set it low to hold RESET low
+	if [ -d "/sys/class/gpio/PB2" ]
+	then
+		echo "SX1301 RESET pin already assigned"
+	else
+		echo "Configuring SX1301 RESET pin"
+		echo 34 > /sys/class/gpio/export
+		echo out > /sys/class/gpio/PB2/direction
+		echo 0 > /sys/class/gpio/PB2/value
+		sleep 0.1
+	fi
+
+	# start the lora packet server
+	if [ -x "/opt/packet_forwarder/lora_pkt_fwd" ]
+	then
+		cd /opt/packet_forwarder
+		./lora_pkt_fwd ./global_conf.json &> /dev/kmsg &
+	else
+		echo "Failed to start LORA packet forwarder"
+	fi
+}
+
+stop()
+{
+	killall -9 lora_pkt_fwd
+}
+
+
+case "$1" in
+	start)
+		start
+	;;
+	stop)
+		stop
+	;;
+	*)
+	;;
+esac
