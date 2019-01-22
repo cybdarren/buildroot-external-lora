@@ -11,6 +11,7 @@ the Lora-Net packages allowing compilation for the SAMA5 SOM1-EK1 board.
 This project provides an extension to buildroot to support these customizations
 outside of the standard buildroot tree.
 
+For a description of the hardware configuration see [here](#Hardware)
 
 ## Install System Dependencies
 
@@ -24,6 +25,7 @@ dependencies are required.
 In some cases, buildroot will notify that additional host dependencies are
 required.  It will let you know what those are.
 
+## [Hardware]
 
 ## Buildroot Dependencies
 
@@ -98,6 +100,8 @@ following commands to set and save the `dtb_name` variable.
     => setenv dtb_name at91-sama5d2_xplained_pda7.dtb
     => saveenv
     => boot
+
+## Hardware
 
 
 ## Documentation
