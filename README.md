@@ -1,11 +1,15 @@
 ![Microchip](docs/microchip_logo.png)
 
-# Microchip SAMA5 Buildroot External
+# Microchip SAMA5 Buildroot External Lora
 
 This [buildroot external][1] includes Microchip packages, patches, setup, and
-configuration to create the SAMA5 demo. This project provides an extension to
-buildroot to support these customizations outside of the standard buildroot
-tree.
+configuration to create a Lora getway and packet forwarder on the SAMA5.
+It uses the Lora-Net/lora_gateway and the Lora-Net/packet_forwarder packages
+found on github. Custom patches are provided in this BR2 external tree to patch
+the Lora-Net packages allowing compilation for the SAMA5 SOM1-EK1 board.
+
+This project provides an extension to buildroot to support these customizations
+outside of the standard buildroot tree.
 
 
 ## Install System Dependencies
@@ -33,10 +37,10 @@ greater than 2018.02-at91.
 Clone, configure, and build.  When building, use the appropriate defconfig in
 the `buildroot-external-microchip/configs` directory for your board.
 
-    git clone https://github.com/linux4sam/buildroot-external-microchip.git
+    git clone https://github.com/cybdarren/buildroot-external-lora.git
     git clone https://github.com/linux4sam/buildroot-at91.git -b 2018.02-at91
     cd buildroot-at91
-    BR2_EXTERNAL=../buildroot-external-microchip/ make sama5d4_xplained_demo_defconfig
+    BR2_EXTERNAL=../buildroot-external-lora/ make sama5d27_som1_ek_headless_defconfig
     make
 
 The resulting bootloader, kernel, and root filesystem will be put in the
