@@ -25,8 +25,6 @@ dependencies are required.
 In some cases, buildroot will notify that additional host dependencies are
 required.  It will let you know what those are.
 
-## [Hardware]
-
 ## Buildroot Dependencies
 
 Many of the demo applications included in this external depend on Qt 5.9 or
@@ -103,6 +101,25 @@ following commands to set and save the `dtb_name` variable.
 
 ## Hardware
 
+The reference hardware consists of a SAMA5D27-SOM1-EK1 board from Microchip. This board features a SAMA5D27 System-On-Module and various hardware interfaces. In particular the EK1 motherboard incorporates 2 MikroElectronica Click sockets. One of these (MBus1) is used to connect the radio board from a Microchip LoRa technology evaluation kit. Seen in the phot:
+
+![SOM1-EK1-LORA](docs/som1_ek1_lora.png)
+
+The connections between the boards were created according to the following table:
+
+SOM1-EK1 Net | MBus 1 Pin | Signal  | Radio Board Pin
+-------------|------------|---------|----------------
+PB2          | J24 Pin 2  | RESET   | 18
+PD0          | J24 Pin 3  | SPI_CS  | 28
+PC30         | J24 Pin 4  | SPI_SCK | 26
+PC29         | J24 Pin 5  | MISO    | 24
+PC28         | J24 Pin 6  | MOSI    | 22
++5V*         | J25 Pin 7  | +5V     | 2+4
+GND          | J24 Pin 8  | GND     | 6+8
+
+* You must also short R80 to enable +5V in the Click socket
+
+![SOM1-EK1-LORA-Connections](docs/som1_connections.png)
 
 ## Documentation
 
