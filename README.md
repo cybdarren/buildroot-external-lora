@@ -137,7 +137,7 @@ The packet forwarder implements the Semtech UDP reference implementation from th
 3. This global_conf.json file must be edited to reflect your actual network setup.
 * Update the global gateway ID by running the script /opt/packet_forwarder/update_gwid.sh global_conf.json
 * Update the local_conf.json gateway ID by running /opt/packet_forwarder/update_gwid.sh local_conf.json  [If you do not do this the local conf default setting overrides the global one]
-* The update script takes the Mac-ID of the ethernet network interface and generates a unique gateway ID from it. It then searches the specified file for a gateway ID and rpelaces it with the new one.
+* The update script takes the Mac-ID of the ethernet network interface and generates a unique gateway ID from it. It then searches the specified file for a gateway ID and replaces it with the new one.
 4. The global_conf.json file needs modifying to reflect the service provider. For TheThingsNetwork these are:
 ```
 "gateway_conf": {
